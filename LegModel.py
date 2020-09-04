@@ -44,12 +44,12 @@ class LegModel:
     def __call__(self,*args,**kwargs):
         return self.inverse_kinetics(*args,**kwargs)
 
-    def inverse_kinetics(self,target,max_iter = 6,starting_angles = None,update=True,__cache={}):
+    def inverse_kinetics(self,target,max_iter = 12,starting_angles = None,update=True,__cache={}):
         if not __cache:
             dim = len(self.angle_base)
             num = 3
             modes  = np.empty( (num**dim,dim)  )
-            values = np.linspace(-np.pi,np.pi,num)*0.2
+            values = np.linspace(-np.pi,np.pi,num)*0.56
             for i in range(modes.shape[0]):
                 for d in range(dim):
                     modes[i][d] = values[( i//(dim**d) )%num]
@@ -69,7 +69,7 @@ class LegModel:
             angles += modes[d]
             angles[angles > np.pi] -= np.pi
             angles[angles < -np.pi] += np.pi
-            modes *= 0.5
+            modes *= 0.56
         if update:
             self.current = angles
         return angles

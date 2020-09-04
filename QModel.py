@@ -20,7 +20,6 @@ class QModel(Thread):
         self.__gaint_offset_up = 0.75
         self.__d = 8
         self.__ds = (self.__d-1.)/self.__d
-        # self.__legs_shift = [0. , 0.75, 0.25, 0.50]
         self.__legs_shift = [0. , 0.75, 0.50, 0.25]
         def _sign(x):
             t = sign(x)
@@ -35,8 +34,8 @@ class QModel(Thread):
         ])
         self.gaint_pattern_base = array([
             [
-                _sign(leg.position)*[1.75,1.75,-1.],
-                _sign(leg.position)*[1.75,1.75,-1.]
+                _sign(leg.position)*[4,4,-1.],
+                _sign(leg.position)*[4,4,-1.]
             ]
             for leg in self.legs
         ])
@@ -59,7 +58,7 @@ class QModel(Thread):
     def set_user_input(self,inp):
         self.__input = inp
 
-    def fk(self,angle,*args,**kwargss): return [ leg.forward_kinetics(angle,*args,**kwargs) for leg,angle in zip(self.legs,angles)]
+    def fk(self,angles,*args,**kwargs): return [ leg.forward_kinetics(angle,*args,**kwargs) for leg,angle in zip(self.legs,angles)]
     def ik(self,points,update=True,*args,**kwargs): return array([ leg.inverse_kinetics(point,update=update,*args,**kwargs) for leg,point in zip(self.legs,points)  ])
 
     def __call__(self,points=None,angles=None,update=True,*args,**kwargs):
@@ -175,11 +174,11 @@ class QModel(Thread):
         self.__input.stop()
 
 if __name__ == "__main__":
-    try:
-        from JoystickInput import JoystickInput
-        from configs import webot_mantis as config
-        from webot_controller import set_angles
+    from JoystickInput import JoystickInput
+    from configs import my_quad as config
+    from q_controller import set_angles
 
+    try:
         MyQuadrupet = QModel(*config)
         MyQuadrupet.set_user_input(JoystickInput())
         MyQuadrupet.set_updater(set_angles)

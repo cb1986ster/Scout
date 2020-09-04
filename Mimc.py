@@ -144,8 +144,6 @@ def main():
             angles[2][2] -= angle_delta
             angles[3][2] -= angle_delta
 
-
-
         # Simulate
         set_angles(angles)
         legs = MyQuadrupet.fk(angles)
